@@ -17,7 +17,7 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private long id;
 
-    @Column(nullable = false)
+    @Column(unique = true, nullable = false) // unique 제약 조건 추가
     private String userId;
 
     @Column(nullable = false)
