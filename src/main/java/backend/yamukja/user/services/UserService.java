@@ -29,6 +29,7 @@ public class UserService {
         User newUser = User.builder()
                 .userId(request.getUserId())
                 .password(encoder.encode(request.getPassword()))
+                .isLunchRecommend(false)
                 .build();
 
         userRepository.save(newUser);

@@ -27,5 +27,5 @@ public class User {
     private Point geography;
 
     @Column(nullable = false)
-    private Boolean isLunchRecommend = false;
+    private Boolean isLunchRecommend;
 }
