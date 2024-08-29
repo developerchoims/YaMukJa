@@ -71,19 +71,18 @@ public class CsvService {
      * @throws SQLException
      * CREATE TABLE TABLENAME (HEADER VARCHAR(00), HEADER VARCHAR(00))
      */
-    private void createTable(String tableName, List<String> headers, Map<String, Integer>maxLength) throws SQLException {
-        // 이미 테이블이 존재할 경우 삭제(같은 테이블이라고 전제함)
-        String dropTableSql = String.format("DROP TABLE IF EXISTS %s", tableName);
+    private void createTable(String tableName, List<String> headers, Map<String, Integer> maxLength) throws SQLException {
+        // 이미 테이블이 존재할 경우 삭제
+        String dropTableSql = String.format("DROP TABLE IF EXISTS `%s`", tableName);
         jdbcTemplate.execute(dropTableSql);
 
         // 테이블 새로 생성
         StringJoiner columns = new StringJoiner(", ");
-
         for (String header : headers) {
-            columns.add(header + " VARCHAR(" + maxLength.get(header) + ")");
+            columns.add("`" + header + "` VARCHAR(" + maxLength.get(header) + ")");
         }
 
-        String createTablesql = String.format("CREATE TABLE %s (%s)", tableName, columns);
+        String createTablesql = String.format("CREATE TABLE `%s` (%s)", tableName, columns);
         jdbcTemplate.execute(createTablesql);
     }
 
@@ -140,7 +139,7 @@ public class CsvService {
 
             // 컬럼 및 파라미터, 데이터 설정
             for (int i = 0; i < headers.size(); i++) {
-                columns.add(headers.get(i));
+                columns.add("`" + headers.get(i) + "`");
                 marks.add("?");
                 values.add(record.get(i));
             }

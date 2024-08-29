@@ -26,7 +26,9 @@ public class CsvController {
         // 파일 이름 추출 후 테이블 이름 생성 ( 파일 이름 = 테이블 이름)
         String fileName = Optional.ofNullable(file.getOriginalFilename()).orElseThrow(NullPointerException::new);
         String tableName = fileName.substring(0, fileName.lastIndexOf("."));
-        csvService.completeCsv(tableName, file);
+        //테이블 이름 안전하게 수정
+        String modifiedTableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+        csvService.completeCsv(modifiedTableName, file);
     }
 }
 
