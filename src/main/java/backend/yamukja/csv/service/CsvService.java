@@ -106,7 +106,7 @@ public class CsvService {
             String[] values = line.split(",");
             List<String> record = new ArrayList<>();
 
-            // 컬럼의 최대 길이 갱신
+            // 컬럼의 최대 길이 갱신, value값 없을 경우 "" 로 값 치환
             for (int i = 0; i < headers.size(); i++) {
                 String header = headers.get(i);
                 String value = values[i].isEmpty() ? "" : values[i];
@@ -138,7 +138,7 @@ public class CsvService {
             StringJoiner marks = new StringJoiner(", ");
             List<Object> values = new ArrayList<>();
 
-            // 컬럼 및 파라미터 설정
+            // 컬럼 및 파라미터, 데이터 설정
             for (int i = 0; i < headers.size(); i++) {
                 columns.add(headers.get(i));
                 marks.add("?");
