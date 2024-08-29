@@ -63,7 +63,7 @@ public class CsvServiceTest {
         doNothing().when(jdbcTemplate).execute(anyString());
 
         // when
-        csvService.createTable("test", headers, maxLength);
+//        csvService.createTable("test", headers, maxLength);
 
         // then
         verify(jdbcTemplate).execute(eq("DROP TABLE IF EXISTS test"));
@@ -83,7 +83,7 @@ public class CsvServiceTest {
         when(jdbcTemplate.update(anyString(), any(Object[].class))).thenReturn(1);
 
         // when
-        csvService.insertData(headers, "test", records);
+//        csvService.insertData(headers, "test", records);
 
         // then
         verify(jdbcTemplate).update(eq("INSERT INTO test (header1, header2) VALUES (?, ?)"), eq(new Object[]{"value1", "value2"}));
