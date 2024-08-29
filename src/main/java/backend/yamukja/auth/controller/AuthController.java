@@ -20,11 +20,6 @@ public class AuthController {
     private final AuthService authService;
     private static final String REFRESH_TOKEN_COOKIE_NAME = "REFRESH_TOKEN";
 
-    @GetMapping("/api/login/test")
-    public UserCustom test(@AuthenticationPrincipal UserCustom userCustom) {
-        return userCustom;
-    }
-
     /**
      * 로그인 엔드포인트
      *
