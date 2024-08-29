@@ -51,7 +51,9 @@ public class UserService {
                 .orElseThrow(() -> new GeneralException(ErrorMessage.NOT_EXIST_USER, HttpStatus.NOT_FOUND));
 
         // 위치 정보 생성
-        Point point = createPoint(request.getLatitude(), request.getLongitude());
+        Double latitude = request.getLatitude();
+        Double longitude = request.getLongitude();
+        Point point = (latitude != null && longitude != null) ? createPoint(latitude, longitude) : null;
 
         user.updateUser(point, request.getIsLunchRecommend());
     }
