@@ -2,8 +2,10 @@ package backend.yamukja.place.controller;
 
 import backend.yamukja.place.model.Place;
 import backend.yamukja.place.service.MappingService;
+import backend.yamukja.place.service.PlaceService;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -19,6 +21,7 @@ public class PlaceController {
 
     private final MappingService mappingService;
     private final RestTemplate restTemplate;
+    private final PlaceService placeService;
 
 
     @Value("${open.api.key}")
@@ -52,5 +55,15 @@ public class PlaceController {
         List<Place> places = mappingService.parseJsonResponse(response.getBody());
 
         return places;
+    }
+
+    @GetMapping("/api/place-list")
+    public List<Place> getPlaceList(
+            @RequestParam("lat") String lat,
+            @RequestParam("lon") String lon,
+            @RequestParam("range") Double range,
+            @RequestParam(value = "order", defaultValue = "distance") String order  // 정렬 기능: rating(평점순), distance(거리순) 중 택 1
+    ) {
+        return placeService.getPlaceList(lat, lon, range, order);
     }
 }
