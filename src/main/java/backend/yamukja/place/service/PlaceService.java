@@ -4,7 +4,6 @@ import backend.yamukja.place.constant.Constants;
 import backend.yamukja.place.model.Place;
 import backend.yamukja.place.repository.PlaceRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.data.domain.Page;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,7 +24,15 @@ public class PlaceService {
 
     @Transactional
     public void saveAllList(List<Place> places) {
-        placeRepository.saveAll(places);
+        List<Place> uniquePlaces = new ArrayList<>();
+
+        for (Place place : places) {
+            if (!placeRepository.existsById(place.getId())) {
+                uniquePlaces.add(place);
+            }
+        }
+
+        placeRepository.saveAll(uniquePlaces);
     }
 
     /**
