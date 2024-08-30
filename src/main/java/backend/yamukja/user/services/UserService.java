@@ -3,6 +3,7 @@ package backend.yamukja.user.services;
 import backend.yamukja.common.exception.GeneralException;
 import backend.yamukja.user.constants.ErrorMessage;
 import backend.yamukja.user.dto.JoinRequestDto;
+import backend.yamukja.user.dto.UserResponse;
 import backend.yamukja.user.entity.User;
 import backend.yamukja.user.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
@@ -12,11 +13,12 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.NoSuchElementException;
+
 @Slf4j
 @Service
 @RequiredArgsConstructor
 public class UserService {
-
     private final BCryptPasswordEncoder encoder;
     private final UserRepository userRepository;
 
@@ -35,5 +37,11 @@ public class UserService {
                 .build();
 
         userRepository.save(newUser);
+    }
+
+    @Transactional(readOnly = true)
+    public UserResponse getDetail(Long id) {
+        User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(ErrorMessage.USER_NOT_FOUND));
+        return new UserResponse(user);
     }
 }
