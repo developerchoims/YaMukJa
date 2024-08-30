@@ -3,6 +3,7 @@ package backend.yamukja.user.controllers;
 import backend.yamukja.auth.model.UserCustom;
 import backend.yamukja.user.dto.JoinRequestDto;
 import backend.yamukja.user.dto.UserResponse;
+import backend.yamukja.user.dto.UpdateRequestDto;
 import backend.yamukja.user.services.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -23,9 +24,17 @@ public class UserController {
     }
 
     @PostMapping("/join")
-    public void join(@RequestBody JoinRequestDto request) {
+    public ResponseEntity<Void> join(@RequestBody JoinRequestDto request) {
         log.info("회원가입 요청 ID: {}", request.getUserId());
         userService.join(request);
+        return ResponseEntity.noContent().build();
+    }
+
+    @PatchMapping("/update")
+    public ResponseEntity<Void> update(@RequestBody UpdateRequestDto request) {
+        log.info("사용자 설정 업데이트 요청 ID: {}", request.getUserId());
+        userService.update(request);
+        return ResponseEntity.noContent().build();
     }
 
     @GetMapping("")

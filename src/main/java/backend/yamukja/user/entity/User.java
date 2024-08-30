@@ -1,17 +1,22 @@
 package backend.yamukja.user.entity;
 
+import backend.yamukja.user.dto.UpdateRequestDto;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicUpdate;
 import org.locationtech.jts.geom.Point;
+
+import java.util.Optional;
 
 @Entity
 @Getter
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
+@DynamicUpdate
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -23,9 +28,14 @@ public class User {
     @Column(nullable = false)
     private String password;
 
-    @Column(columnDefinition = "GEOMETRY")
+    @Column(columnDefinition = "POINT SRID 4326")
     private Point geography;
 
     @Column(nullable = false)
     private Boolean isLunchRecommend;
+
+    public void updateUser(Point geography, Boolean isLunchRecommend){
+        if (geography != null) this.geography = geography;
+        if (isLunchRecommend != null) this.isLunchRecommend = isLunchRecommend;
+    }
 }
