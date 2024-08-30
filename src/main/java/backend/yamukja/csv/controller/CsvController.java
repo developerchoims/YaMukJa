@@ -22,11 +22,13 @@ public class CsvController {
      * 다양한 csv 파일을 DB에 업로드
      */
     @PostMapping("/upload")
-    public void uploadCSV(@RequestParam("file") MultipartFile file) throws Exception {
+    public void uploadCsv(@RequestParam("file") MultipartFile file) throws Exception {
         // 파일 이름 추출 후 테이블 이름 생성 ( 파일 이름 = 테이블 이름)
-        String fileName = Optional.of(file.getOriginalFilename()).orElseThrow(NullPointerException::new);
+        String fileName = Optional.ofNullable(file.getOriginalFilename()).orElseThrow(NullPointerException::new);
         String tableName = fileName.substring(0, fileName.lastIndexOf("."));
-        csvService.completeCsv(tableName, file);
+        //테이블 이름 안전하게 수정
+        String modifiedTableName = tableName.replaceAll("[^a-zA-Z0-9_]", "");
+        csvService.completeCsv(modifiedTableName, file);
     }
 }
 
