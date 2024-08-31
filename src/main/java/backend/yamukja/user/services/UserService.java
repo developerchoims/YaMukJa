@@ -49,6 +49,7 @@ public class UserService {
     public UserResponse getDetail(Long id) {
         User user = userRepository.findById(id).orElseThrow(() -> new NoSuchElementException(ErrorMessage.USER_NOT_FOUND));
         return new UserResponse(user);
+    }
 
     @Transactional
     public void update(UpdateRequestDto request){

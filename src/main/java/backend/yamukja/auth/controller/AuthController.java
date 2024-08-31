@@ -71,7 +71,7 @@ public class AuthController {
         HttpHeaders headers = new HttpHeaders();
         headers.add(HttpHeaders.SET_COOKIE, refreshTokenCookie.toString());
 
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.noContent().headers(headers).build();
     }
 
     /**
