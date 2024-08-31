@@ -46,7 +46,6 @@ public class JwtFilter extends OncePerRequestFilter {
         String token = resolveToken(request);
 
         if (token != null) {
-            log.info("token: {}", token);
             // JWT -> Access Token 객체
             AccessToken accessToken = tokenService.convertAccessToken(token);
 
