@@ -1,5 +1,6 @@
 package backend.yamukja.place.controller;
 
+import backend.yamukja.auth.model.UserCustom;
 import backend.yamukja.common.service.RedisService;
 import backend.yamukja.place.constant.Constants;
 import backend.yamukja.place.model.Place;
@@ -10,6 +11,7 @@ import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -104,7 +106,8 @@ public class PlaceController {
             @RequestParam(value = "pSize", defaultValue = "100") int pSize,
             @RequestParam(value = "pIndex", defaultValue = "1") int pIndex,
             @RequestParam(value = "SIGUN_NM", required = false) String sigunNm,
-            @RequestParam(value = "SIGUN_CD", required = false) String sigunCd) {
+            @RequestParam(value = "SIGUN_CD", required = false) String sigunCd,
+            @AuthenticationPrincipal UserCustom userCustom) {
 
         // URI 빌드
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants.CHINESE_URL_TEMPLATE)
@@ -139,7 +142,8 @@ public class PlaceController {
             @RequestParam(value = "pSize", defaultValue = "100") int pSize,
             @RequestParam(value = "pIndex", defaultValue = "1") int pIndex,
             @RequestParam(value = "SIGUN_NM", required = false) String sigunNm,
-            @RequestParam(value = "SIGUN_CD", required = false) String sigunCd) {
+            @RequestParam(value = "SIGUN_CD", required = false) String sigunCd,
+            @AuthenticationPrincipal UserCustom userCustom) {
 
         // URI 빌드
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants.JAPANESE_URL_TEMPLATE)
@@ -174,7 +178,8 @@ public class PlaceController {
             @RequestParam(value = "pSize", defaultValue = "100") int pSize,
             @RequestParam(value = "pIndex", defaultValue = "1") int pIndex,
             @RequestParam(value = "SIGUN_NM", required = false) String sigunNm,
-            @RequestParam(value = "SIGUN_CD", required = false) String sigunCd) {
+            @RequestParam(value = "SIGUN_CD", required = false) String sigunCd,
+            @AuthenticationPrincipal UserCustom userCustom) {
 
         // URI 빌드
         UriComponentsBuilder uriBuilder = UriComponentsBuilder.fromHttpUrl(Constants.FASTFOOD_URL_TEMPLATE)
