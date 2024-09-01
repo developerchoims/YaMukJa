@@ -13,7 +13,6 @@ import java.time.LocalDateTime;
 @Getter
 @RedisHash(value = "activeUser", timeToLive = 14400) // 4시간 저장
 @ToString
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class ActiveUser {
     @Id

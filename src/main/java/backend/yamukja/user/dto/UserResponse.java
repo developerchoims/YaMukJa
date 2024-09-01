@@ -1,10 +1,12 @@
 package backend.yamukja.user.dto;
 
 import backend.yamukja.user.entity.User;
+import lombok.EqualsAndHashCode;
 import lombok.Getter;
 import org.locationtech.jts.geom.Point;
 
 @Getter
+@EqualsAndHashCode
 public class UserResponse {
     private Long id;
     private String username;
