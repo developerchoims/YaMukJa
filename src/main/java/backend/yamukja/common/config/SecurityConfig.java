@@ -29,7 +29,7 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
 
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/api/login", "/api/register", "/api/token/reissue", "/api/logout").permitAll()
+                        .requestMatchers("/api/login", "/api/register", "/api/token/reissue", "/api/logout", "/api/place-info").permitAll()
                         .anyRequest().authenticated()  // 그 외 요청은 인증 필요
                 )
                 .exceptionHandling(e -> e.authenticationEntryPoint(authenticationEntryPoint))
