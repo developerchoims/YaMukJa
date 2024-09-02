@@ -1,4 +1,4 @@
-package backend.yamukja.place.dto;
+package backend.yamukja.place.vo;
 
 import backend.yamukja.place.model.Place;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Getter
 @NoArgsConstructor
 @JsonIgnoreProperties(ignoreUnknown = true)
-public class PlaceDto {
+public class PlaceDVO {
 
     @JsonProperty("SIGUN_NM")
     private String sigunNm;

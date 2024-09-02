@@ -2,7 +2,7 @@ package backend.yamukja.place.service;
 
 import backend.yamukja.common.service.RedisService;
 import backend.yamukja.place.constant.Constants;
-import backend.yamukja.place.dto.PlaceDto;
+import backend.yamukja.place.vo.PlaceDVO;
 import backend.yamukja.place.model.Place;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -46,10 +46,10 @@ public class MappingService {
                 for (JsonNode node : rowNode) {
                     String jsonNodeString = objectMapper.writeValueAsString(node);
                     try {
-                        //PlaceDto 로 넘어오는 node 의 모든 필드를 받습니다
-                        PlaceDto placeDto = objectMapper.readValue(jsonNodeString, PlaceDto.class);
+                        //PlaceDVO 로 넘어오는 node 의 모든 필드를 받습니다
+                        PlaceDVO placeDVO = objectMapper.readValue(jsonNodeString, PlaceDVO.class);
 
-                        Place place = placeDto.toPlaceEntity();
+                        Place place = placeDVO.toPlaceEntity();
 
                         if (place != null && seenIds.add(place.getId())) {
                             places.add(place);
