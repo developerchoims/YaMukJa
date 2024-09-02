@@ -1,11 +1,17 @@
 package backend.yamukja.place.model;
 
+import backend.yamukja.review.entity.Review;
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToMany;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -94,6 +100,10 @@ public class Place {
     // 총 평점 제출 개수(맛집 평가 API 계산용)
     @ColumnDefault("0")
     private Integer ratingCount;
+
+    // Review와의 일대다 관계 설정
+    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     public void generateId() {
         this.id = bizplcNm + "_" + refineLotnoAddr;

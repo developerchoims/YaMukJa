@@ -1,6 +1,6 @@
 package backend.yamukja.user.entity;
 
-import backend.yamukja.user.dto.UpdateRequestDto;
+import backend.yamukja.review.entity.Review;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.locationtech.jts.geom.Point;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter
@@ -33,6 +34,10 @@ public class User {
 
     @Column(nullable = false)
     private Boolean isLunchRecommend;
+
+    // Review와의 일대다 관계 설정
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<Review> reviews = new ArrayList<>();
 
     public void updateUser(Point geography, Boolean isLunchRecommend){
         if (geography != null) this.geography = geography;
