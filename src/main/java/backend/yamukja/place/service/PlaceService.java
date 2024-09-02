@@ -8,11 +8,8 @@ import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.ArrayList;
-import java.util.Comparator;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
@@ -23,16 +20,17 @@ public class PlaceService {
     private static final String RATING = "rating";
 
     @Transactional
-    public void saveAllList(List<Place> places) {
-        List<Place> uniquePlaces = new ArrayList<>();
+    public List<Place> saveAllList(List<Place> places) {
+        List<String> placeIds = places.stream().map(Place::getId).collect(Collectors.toList());
 
-        for (Place place : places) {
-            if (!placeRepository.existsById(place.getId())) {
-                uniquePlaces.add(place);
-            }
-        }
+        Set<String> existingIds = placeRepository.findAllById(placeIds)
+                                    .stream().map(Place::getId).collect(Collectors.toSet());
 
-        placeRepository.saveAll(uniquePlaces);
+        List<Place> uniquePlaces = places.stream()
+                .filter(place -> !existingIds.contains(place.getId()) && "영업".equals(place.getBsnStateNm()))
+                .collect(Collectors.toList());
+
+        return placeRepository.saveAll(uniquePlaces);
     }
 
     /**
