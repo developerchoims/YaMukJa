@@ -2,12 +2,12 @@ package backend.yamukja.place.service;
 
 import backend.yamukja.common.service.RedisService;
 import backend.yamukja.place.constant.Constants;
+import backend.yamukja.place.dto.PlaceDto;
 import backend.yamukja.place.model.Place;
 import com.fasterxml.jackson.databind.JsonNode;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
-import org.springframework.web.client.RestTemplate;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,7 +19,6 @@ import java.util.Set;
 @RequiredArgsConstructor
 public class MappingService {
 
-    private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final PlaceService placeService;
     private final RedisService redisService;
@@ -47,14 +46,16 @@ public class MappingService {
                 for (JsonNode node : rowNode) {
                     String jsonNodeString = objectMapper.writeValueAsString(node);
                     try {
-                        Place place = objectMapper.readValue(jsonNodeString, Place.class);
-                        //json property 로 place 의 모든 field 가 set 된 후에 generate id 를 수행
-                        place.generateId();
+                        //PlaceDto 로 넘어오는 node 의 모든 필드를 받습니다
+                        PlaceDto placeDto = objectMapper.readValue(jsonNodeString, PlaceDto.class);
+
+                        Place place = placeDto.toPlaceEntity();
+
                         if (place != null && seenIds.add(place.getId())) {
                             places.add(place);
                         }
                     } catch (IOException e) {
-                        e.printStackTrace();
+                        throw new IOException(Constants.SQL_PARSE_ERROR);
                     }
                 }
             } else {
@@ -67,21 +68,4 @@ public class MappingService {
         placeService.saveAllList(places);
         return places;
     }
-
-    public int fetchTotalCount(String uri) {
-        String jsonResponse = restTemplate.getForObject(uri, String.class);
-        if (jsonResponse == null) {
-            throw new IllegalStateException(Constants.SQL_PARSE_ERROR);
-        }
-
-        try {
-            JsonNode rootNode = objectMapper.readTree(jsonResponse);
-            JsonNode headNode = rootNode.path("Genrestrtchifood").path(0).path("head");
-            return headNode.path(0).path("list_total_count").asInt();
-        } catch (IOException e) {
-            e.printStackTrace();
-            return 0;
-        }
-    }
-
 }

@@ -33,44 +33,11 @@ public class Place {
     @JsonProperty("BSN_STATE_NM")
     private String bsnStateNm;
 
-    @JsonProperty("CLSBIZ_DE")
-    private String clsbizDe;
-
-    @JsonProperty("LOCPLC_AR")
-    private String locplcAr;
-
-    @JsonProperty("GRAD_FACLT_DIV_NM")
-    private String gradFacltDivNm;
-
-    @JsonProperty("MALE_ENFLPSN_CNT")
-    private Integer maleEnflpsnCnt;
-
-    @JsonProperty("YY")
-    private String yy;
-
-    @JsonProperty("MULTI_USE_BIZESTBL_YN")
-    private String multiUseBizestblYn;
-
-    @JsonProperty("GRAD_DIV_NM")
-    private String gradDivNm;
-
-    @JsonProperty("TOT_FACLT_SCALE")
-    private String totFacltScale;
-
-    @JsonProperty("FEMALE_ENFLPSN_CNT")
-    private Integer femaleEnflpsnCnt;
-
-    @JsonProperty("BSNSITE_CIRCUMFR_DIV_NM")
-    private String bsnsiteCircumfrDivNm;
-
-    @JsonProperty("SANITTN_INDUTYPE_NM")
-    private String sanitnIndutypeNm;
-
     @JsonProperty("SANITTN_BIZCOND_NM")
     private String sanitnBizcondNm;
 
-    @JsonProperty("TOT_EMPLY_CNT")
-    private Integer totEmplyCnt;
+    @JsonProperty("BSNSITE_CIRCUMFR_DIV_NM")
+    private String bsnsiteCircumfrDivNm;
 
     @JsonProperty("REFINE_ROADNM_ADDR")
     private String refineRoadnmAddr;
@@ -94,9 +61,4 @@ public class Place {
     // 총 평점 제출 개수(맛집 평가 API 계산용)
     @ColumnDefault("0")
     private Integer ratingCount;
-
-    public void generateId() {
-        this.id = bizplcNm + "_" + refineLotnoAddr;
-    }
-
 }
