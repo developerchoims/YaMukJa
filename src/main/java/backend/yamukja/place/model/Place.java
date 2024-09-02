@@ -4,10 +4,14 @@ import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import jakarta.persistence.Entity;
 import jakarta.persistence.Id;
-import lombok.Getter;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
 @JsonIgnoreProperties(ignoreUnknown = true)
 public class Place {
 
@@ -82,6 +86,14 @@ public class Place {
 
     @JsonProperty("REFINE_WGS84_LOGT")
     private String refineWgs84Logt;
+
+    // 추가필드 - 평점(double 타입, 초기 값은 0.0 이며, 맛집이 받은 모든 평가의 평균)
+    @ColumnDefault("0.0")
+    private Double rating;
+
+    // 총 평점 제출 개수(맛집 평가 API 계산용)
+    @ColumnDefault("0")
+    private Integer ratingCount;
 
     public void generateId() {
         this.id = bizplcNm + "_" + refineLotnoAddr;

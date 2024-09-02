@@ -1,5 +1,6 @@
 package backend.yamukja.place.service;
 
+import backend.yamukja.common.service.RedisService;
 import backend.yamukja.place.constant.Constants;
 import backend.yamukja.place.model.Place;
 import com.fasterxml.jackson.databind.JsonNode;
@@ -21,13 +22,50 @@ public class MappingService {
     private final RestTemplate restTemplate;
     private final ObjectMapper objectMapper;
     private final PlaceService placeService;
+    private final RedisService redisService;
 
-    public List<Place> fetchAndDeserialize(String uri) {
-        String jsonResponse = restTemplate.getForObject(uri, String.class);
-        if (jsonResponse == null) {
-            throw new IllegalStateException(Constants.SQL_PARSE_ERROR);
+    public List<Place> parseJsonResponse(String json, String urlTemplate) {
+        List<Place> places = new ArrayList<>();
+        Set<String> seenIds = new HashSet<>(); // 중복된 데이터 제거용 Set
+
+        // URL에 맞는 Root Node 이름과 Redis Key 를 가져옵니다
+        String[] info = Constants.URL_INFO_MAP.get(urlTemplate);
+        String rootNodeName = info[0];
+        String redisKey = info[1];
+
+        try {
+            JsonNode rootNode = objectMapper.readTree(json);
+            JsonNode genrestrtNode = rootNode.path(rootNodeName);
+            JsonNode rowNode = genrestrtNode.path(1).path("row");
+
+            // Redis 업데이트
+            JsonNode headNode = genrestrtNode.path(0).path("head");
+            int totalCount = headNode.path(0).path("list_total_count").asInt();
+            redisService.pushApiState(redisKey, totalCount);
+
+            if (rowNode.isArray()) {
+                for (JsonNode node : rowNode) {
+                    String jsonNodeString = objectMapper.writeValueAsString(node);
+                    try {
+                        Place place = objectMapper.readValue(jsonNodeString, Place.class);
+                        //json property 로 place 의 모든 field 가 set 된 후에 generate id 를 수행
+                        place.generateId();
+                        if (place != null && seenIds.add(place.getId())) {
+                            places.add(place);
+                        }
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+            } else {
+                throw new IllegalStateException(Constants.SQL_PARSE_ERROR);
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
         }
-        return parseJsonResponse(jsonResponse);
+
+        placeService.saveAllList(places);
+        return places;
     }
 
     public int fetchTotalCount(String uri) {
@@ -46,51 +84,4 @@ public class MappingService {
         }
     }
 
-    public List<Place> parseJsonResponse(String json) {
-        List<Place> places = new ArrayList<>();
-        Set<String> seenIds = new HashSet<>(); // 중복된 data 가 있어서 Set 을 이용해서 중복 제거
-
-        try {
-            JsonNode rootNode = objectMapper.readTree(json);
-            JsonNode genrestrtchifoodNode = rootNode.path("Genrestrtchifood");
-            JsonNode rowNode = genrestrtchifoodNode.path(1).path("row");
-
-            if (rowNode.isArray()) {
-                for (JsonNode node : rowNode) {
-                    String jsonNodeString = objectMapper.writeValueAsString(node);
-                    try {
-                        Place place = objectMapper.readValue(jsonNodeString, Place.class);
-                        place.generateId();
-                        if (place != null && seenIds.add(place.getId())) {
-                            places.add(place);
-                        }
-                    } catch (IOException e) {
-                        e.printStackTrace();
-                    }
-                }
-            } else {
-                throw new IllegalStateException(Constants.SQL_PARSE_ERROR);
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-        placeService.saveAllList(places);
-        return places;
-    }
-
-
-    public List<Place> fetchAllPages(String urlTemplate, int totalCount) {
-        int pIndex = 1;
-        int pSize = 100;
-        List<Place> allPlaces = new ArrayList<>();
-        int totalPages = (totalCount + pSize - 1) / pSize;
-
-        for (int i = 1; i <= totalPages; i++) {
-            String pagedUri = urlTemplate + "&pIndex=" + i + "&pSize=" + pSize;
-            List<Place> places = fetchAndDeserialize(pagedUri);
-            allPlaces.addAll(places);
-        }
-
-        return allPlaces;
-    }
 }
