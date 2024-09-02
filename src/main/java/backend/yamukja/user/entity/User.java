@@ -1,6 +1,6 @@
 package backend.yamukja.user.entity;
 
-import backend.yamukja.user.dto.UpdateRequestDto;
+import backend.yamukja.review.entity.Review;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +9,8 @@ import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 import org.locationtech.jts.geom.Point;
 
-import java.util.Optional;
+import java.util.ArrayList;
+import java.util.List;
 
 @Entity
 @Getter

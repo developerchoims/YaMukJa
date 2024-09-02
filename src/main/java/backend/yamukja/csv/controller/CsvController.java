@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequiredArgsConstructor
-@RequestMapping("/csv")
+@RequestMapping("/api/csv")
 public class CsvController {
 
     private final CsvService csvService;
