@@ -102,7 +102,7 @@ public class Place {
     private Integer ratingCount;
 
     // Review와의 일대다 관계 설정
-    @OneToMany(mappedBy = "place", cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Review> reviews = new ArrayList<>();
 
     public void generateId() {

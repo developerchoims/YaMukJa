@@ -35,10 +35,6 @@ public class User {
     @Column(nullable = false)
     private Boolean isLunchRecommend;
 
-    // Review와의 일대다 관계 설정
-    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, orphanRemoval = true)
-    private List<Review> reviews = new ArrayList<>();
-
     public void updateUser(Point geography, Boolean isLunchRecommend){
         if (geography != null) this.geography = geography;
         if (isLunchRecommend != null) this.isLunchRecommend = isLunchRecommend;

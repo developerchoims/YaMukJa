@@ -4,6 +4,7 @@ import backend.yamukja.place.model.Place;
 import backend.yamukja.user.entity.User;
 import jakarta.persistence.*;
 import lombok.AccessLevel;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -34,5 +35,13 @@ public class Review {
     // 평가 내용 (0 ~ 255자)
     @Column(length = 765)
     private String content;
+
+    @Builder
+    public Review(User user, Place place, Integer score, String content) {
+        this.user = user;
+        this.place = place;
+        this.score = score;
+        this.content = content;
+    }
 
 }
