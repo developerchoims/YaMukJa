@@ -65,7 +65,6 @@ public class MappingService {
             e.printStackTrace();
         }
 
-        placeService.saveAllList(places);
-        return places;
+        return placeService.saveAllList(places);
     }
 }
