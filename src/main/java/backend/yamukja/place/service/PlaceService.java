@@ -2,7 +2,12 @@ package backend.yamukja.place.service;
 
 import backend.yamukja.place.constant.Constants;
 import backend.yamukja.place.model.Place;
+import backend.yamukja.place.model.PlaceRatingWithReviewsDto;
 import backend.yamukja.place.repository.PlaceRepository;
+import backend.yamukja.review.entity.Review;
+import backend.yamukja.review.model.ReviewResponseDto;
+import backend.yamukja.review.repository.ReviewRepository;
+import jakarta.persistence.EntityNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.util.Pair;
 import org.springframework.stereotype.Service;
@@ -16,6 +21,7 @@ import java.util.stream.Collectors;
 public class PlaceService {
 
     private final PlaceRepository placeRepository;
+    private final ReviewRepository reviewRepository;
     private static final String DISTANCE = "distance";
     private static final String RATING = "rating";
 
@@ -112,4 +118,27 @@ public class PlaceService {
 
         return R * c;
     }
+
+    public PlaceRatingWithReviewsDto getPlaceRatingWithReviews(String placeId) {
+        Place place = placeRepository.findById(placeId)
+                .orElseThrow(() -> new EntityNotFoundException(placeId + " 에 해당하는 음식점이 존재하지 않습니다."));
+
+        List<ReviewResponseDto> reviews = reviewRepository.findByPlaceOrderByIdDesc(place).stream()
+                .map(review -> new ReviewResponseDto(
+                        review.getId(),
+                        review.getUser().getUserId(),
+                        review.getScore(),
+                        review.getContent()
+                ))
+                .collect(Collectors.toList());
+
+
+
+        return new PlaceRatingWithReviewsDto(
+                place.getRating(),
+                place.getRatingCount(),
+                reviews
+        );
+    }
+
 }
