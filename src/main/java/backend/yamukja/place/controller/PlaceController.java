@@ -4,17 +4,18 @@ import backend.yamukja.auth.model.UserCustom;
 import backend.yamukja.common.service.RedisService;
 import backend.yamukja.place.constant.Constants;
 import backend.yamukja.place.model.Place;
+import backend.yamukja.place.model.PlaceRatingWithReviewsDto;
+import backend.yamukja.place.repository.PlaceRepository;
 import backend.yamukja.place.service.MappingService;
 import backend.yamukja.place.service.PlaceService;
+import backend.yamukja.review.service.ReviewService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
 
@@ -29,6 +30,11 @@ public class PlaceController {
     private final RestTemplate restTemplate;
     private final PlaceService placeService;
     private final RedisService redisService;
+
+    private final ReviewService reviewService;
+
+    @Autowired
+    private PlaceRepository placeRepository;
 
 
     @Value("${open.api.key}")
@@ -197,6 +203,26 @@ public class PlaceController {
         // RestTemplate을 사용하여 API 요청 보내기
         ResponseEntity<String> response = restTemplate.getForEntity(uriBuilder.toUriString(), String.class);
         return mappingService.parseJsonResponse(response.getBody(), Constants.FASTFOOD_URL_TEMPLATE);
+    }
+
+    @PatchMapping("/{placeId}/rating")
+    public ResponseEntity<String> updatePlaceRating(@PathVariable String placeId) {
+        Place place = placeRepository.findById(placeId).orElse(null);
+
+        if (place == null) {
+            return ResponseEntity.notFound().build();
+        }
+
+        reviewService.updateRating(place);
+
+        return ResponseEntity.ok("평점이 update 되었습니다.");
+    }
+
+    @GetMapping("/{placeId}/reviews")
+    public ResponseEntity<PlaceRatingWithReviewsDto> getPlaceRatingWithReviews(@PathVariable String placeId) {
+        PlaceRatingWithReviewsDto placeRatingWithReviews = placeService.getPlaceRatingWithReviews(placeId);
+
+        return ResponseEntity.ok(placeRatingWithReviews);
     }
 
 }

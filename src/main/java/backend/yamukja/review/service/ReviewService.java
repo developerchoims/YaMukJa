@@ -5,6 +5,7 @@ import backend.yamukja.place.model.UpdatePlaceRatingDto;
 import backend.yamukja.place.repository.PlaceRepository;
 import backend.yamukja.review.entity.Review;
 import backend.yamukja.review.model.CreateReviewDto;
+import backend.yamukja.review.model.ReviewResponseDto;
 import backend.yamukja.review.repository.ReviewRepository;
 import backend.yamukja.user.entity.User;
 import backend.yamukja.user.repository.UserRepository;
@@ -13,6 +14,9 @@ import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @RequiredArgsConstructor
 @Service
@@ -58,4 +62,19 @@ public class ReviewService {
                                                         .build();
         placeRepository.updateRating(dto);
     }
+
+
+    public void updateRating(Place place) {
+        List<Review> reviews = reviewRepository.findByPlace(place);
+
+        double averageRating = reviews.stream()
+                .mapToInt(Review::getScore)
+                .average()
+                .orElse(0.0);
+
+        place.setRating(Double.valueOf(String.format("%.1f", averageRating)));
+
+        placeRepository.save(place);
+    }
+
 }

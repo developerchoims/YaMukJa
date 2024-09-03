@@ -39,4 +39,5 @@ public class User {
         if (geography != null) this.geography = geography;
         if (isLunchRecommend != null) this.isLunchRecommend = isLunchRecommend;
     }
+
 }
