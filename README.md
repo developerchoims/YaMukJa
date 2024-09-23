@@ -1,6 +1,6 @@
 
 
-> # 
+> # 위치 기반 맛집 제공 서비스를 제공
 인스타그램, 스레드, 페이스북, 트위터 등 여러 SNS에 게시된 특정 해시태그를 기반으로, 관련 게시물을 한 곳에서 통합적으로 확인할 수 있는 웹서비스
 
 
@@ -51,7 +51,7 @@
 
 
 ## 주요 기능
-- Access Token은 Cookie에 저장
+- csv 파일을 이용한 db 구축 기능
 - Refresh Token은 Redis에 저장
 - Access Token이 만료될 경우 프론트에 401반환
 - 프론트에서 Refresh Token을 이용한 Access Token 재발급 요청
