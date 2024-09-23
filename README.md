@@ -22,7 +22,8 @@
 |000|지역 기반 맛집 추천|
 
 ## ERD
-![image](https://github.com/user-attachments/assets/83479aee-5754-468e-932b-877c60074641)
+![image](https://github.com/user-attachments/assets/e22a95b5-b42e-4dad-af04-cbadf5524855)
+
 
 
 ## 개발 환경
@@ -46,18 +47,12 @@
 </div>
 
 
-#### [기타]
-<img src="https://img.shields.io/badge/Redis-DC382D?style=for-the-badge&logo=Redis&logoColor=white"> 
-
-
 ## 주요 기능
-- csv 파일을 이용한 db 구축 기능
-- Refresh Token은 Redis에 저장
-- Access Token이 만료될 경우 프론트에 401반환
-- 프론트에서 Refresh Token을 이용한 Access Token 재발급 요청
-- 서버에서 인증 후 재발급 혹은 재로그인 요구
+- csv 파일을 이용한 db 구축 기능 (모든 csv 파일 지원 가능)
+- 맛집 평가 및 리뷰 남기기 기능
 
 ## 이슈 트래킹
-![image](https://github.com/user-attachments/assets/24504b2c-4a4d-455e-b354-b10649ec910d)
+![image](https://github.com/user-attachments/assets/af347140-bcc1-4f6d-8eab-18ea58f84752)
+
 
 
